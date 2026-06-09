@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 赋能业务判断力 · 一线业务岗的 91 天实战 · v0.6 投屏稿</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100vw; height: 100vh;
+    overflow: hidden;
+    background: #0a0a0a; color: #e8e8e8;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+
+  /* ===== 单页 slide 容器 ===== */
+  .slide {
+    position: absolute; top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    padding: 60px 100px;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    animation: fadeIn 0.4s ease-out;
+  }
+  .slide.active { display: flex; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== 段标识 ===== */
+  .seg-tag {
+    color: #f5d77a;
+    font-size: 14px;
+    letter-spacing: 4px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  /* 强调款段标识：放大 + 字间距 + 微发光呼吸 */
+  .seg-tag.emphasis {
+    font-size: 20px;
+    letter-spacing: 6px;
+    color: #ffe9a8;
+    text-shadow: 0 0 12px rgba(245,215,122,0.55);
+    animation: tagGlow 2.6s ease-in-out infinite;
+  }
+  @keyframes tagGlow {
+    0%, 100% { text-shadow: 0 0 8px rgba(245,215,122,0.35); }
+    50%      { text-shadow: 0 0 22px rgba(245,215,122,0.85), 0 0 4px rgba(255,255,255,0.3); }
+  }
+  /* 重点收尾金句 */
+  .key-quote {
+    text-align: center;
+    color: #ffe9a8;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-shadow: 0 0 16px rgba(245,215,122,0.6);
+    animation: quoteGlow 3s ease-in-out infinite;
+  }
+  @keyframes quoteGlow {
+    0%, 100% { text-shadow: 0 0 10px rgba(245,215,122,0.4); }
+    50%      { text-shadow: 0 0 26px rgba(245,215,122,0.9), 0 0 6px rgba(255,255,255,0.35); }
+  }
+
+  /* ===== 主标题 / 副标题 ===== */
+  h1 {
+    font-size: 56px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #fff;
+    margin-bottom: 20px;
+    line-height: 1.3;
+  }
+  h2 {
+    font-size: 32px;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 28px;
+    line-height: 1.4;
+  }
+  h3 {
+    font-size: 22px;
+    color: #aaa;
+    font-weight: 400;
+    letter-spacing: 1.2px;
+    margin-bottom: 36px;
+    line-height: 1.6;
+  }
+
+  /* ===== 金色元素 ===== */
+  .gold { color: #f5d77a; }
+  .gold-line {
+    color: #f5d77a;
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    line-height: 1.7;
+    margin: 24px 0;
+  }
+  .gold-quote {
+    color: #f5d77a;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.8;
+    padding: 30px 36px;
+    border-left: 4px solid #f5d77a;
+    background: rgba(245,215,122,0.06);
+    margin: 28px 0;
+  }
+
+  /* ===== 正文 ===== */
+  .body-text {
+    font-size: 22px;
+    line-height: 2;
+    color: #d8d8d8;
+  }
+  .body-text strong { color: #f5d77a; font-weight: 500; }
+  .body-text p { margin-bottom: 18px; }
+  .small {
+    font-size: 16px;
+    color: #888;
+    line-height: 1.8;
+  }
+
+  /* ===== ASCII / 主图区块 ===== */
+  .ascii-block {
+    background: #161616;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    padding: 28px 36px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 16px;
+    line-height: 1.7;
+    color: #cccccc;
+    white-space: pre;
+    overflow: auto;
+    margin: 20px 0;
+  }
+  .ascii-block .gold { color: #f5d77a; font-weight: 600; }
+  .ascii-block .dim { color: #666; }
+
+  /* ===== 卡片 / 列表 ===== */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin: 24px 0;
+  }
+  .card {
+    background: #161616;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    padding: 24px 28px;
+  }
+  .card .card-title {
+    color: #f5d77a;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+  .card .card-body {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #ccc;
+  }
+
+  /* ===== 双栏对照 ===== */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin: 20px 0;
+  }
+  .compare .col {
+    background: #141414;
+    border-radius: 8px;
+    padding: 28px 32px;
+  }
+  .compare .col h4 {
+    font-size: 20px;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+  .compare .col.before h4 { color: #888; }
+  .compare .col.after h4 { color: #f5d77a; }
+  .compare .col ul { list-style: none; }
+  .compare .col li {
+    font-size: 17px;
+    line-height: 2.1;
+    color: #ccc;
+    padding-left: 20px;
+    position: relative;
+  }
+  .compare .col li::before {
+    content: "—"; position: absolute; left: 0; color: #555;
+  }
+
+  /* ===== 时间卡 ===== */
+  table.timecard {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 17px;
+  }
+  table.timecard th, table.timecard td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #2a2a2a;
+    text-align: left;
+  }
+  table.timecard th {
+    color: #f5d77a; font-weight: 600; letter-spacing: 1px;
+  }
+  table.timecard td.num { color: #f5d77a; font-weight: 600; }
+
+  /* ===== 占位图框（演讲时插主图）===== */
+  .image-placeholder {
+    background: #141414;
+    border: 2px dashed #444;
+    border-radius: 12px;
+    padding: 60px 40px;
+    text-align: center;
+    margin: 20px 0;
+  }
+  .image-placeholder .ph-title {
+    color: #f5d77a;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    letter-spacing: 2px;
+  }
+  .image-placeholder .ph-desc {
+    color: #888;
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  /* ===== 翻页控件 ===== */
+  .nav {
+    position: fixed; bottom: 24px; right: 32px;
+    display: flex; align-items: center; gap: 18px;
+    background: rgba(20,20,20,0.85);
+    border: 1px solid #2a2a2a;
+    padding: 10px 18px;
+    border-radius: 24px;
+    backdrop-filter: blur(8px);
+    z-index: 100;
+  }
+  .nav button {
+    background: transparent; border: none; color: #f5d77a;
+    cursor: pointer; font-size: 18px; padding: 4px 10px;
+  }
+  .nav button:hover { color: #fff; }
+  .nav .counter {
+    color: #aaa; font-size: 15px; letter-spacing: 1px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ===== 段索引侧栏（可选） ===== */
+  .seg-indicator {
+    position: fixed; top: 24px; left: 32px;
+    display: flex; gap: 8px;
+    z-index: 100;
+  }
+  .seg-indicator .dot {
+    width: 36px; height: 4px;
+    background: #2a2a2a;
+    border-radius: 2px;
+    transition: background 0.3s;
+  }
+  .seg-indicator .dot.active { background: #f5d77a; }
+
+  /* ===== 强调红 / 警示 ===== */
+  .red { color: #ff6b6b; }
+  .warning {
+    background: rgba(255,107,107,0.08);
+    border-left: 4px solid #ff6b6b;
+    padding: 20px 24px;
+    border-radius: 4px;
+    margin: 18px 0;
+    font-size: 18px;
+    line-height: 1.8;
+    color: #e8e8e8;
+  }
+
+  /* ===== 收尾金句页 ===== */
+  .finale {
+    text-align: center;
+  }
+  .finale .quote {
+    font-size: 56px;
+    color: #f5d77a;
+    font-weight: 600;
+    letter-spacing: 3px;
+    line-height: 1.8;
+    margin: 40px 0;
+  }
+  .finale .signature {
+    font-size: 18px;
+    color: #888;
+    letter-spacing: 4px;
+    margin-top: 60px;
+  }
+
+  /* ===== 段封面页 ===== */
+  .seg-cover {
+    text-align: center;
+    background: radial-gradient(ellipse at center, rgba(245,215,122,0.06), transparent 70%);
+  }
+  .seg-cover .seg-num {
+    font-size: 24px;
+    color: #f5d77a;
+    letter-spacing: 8px;
+    margin-bottom: 28px;
+  }
+  .seg-cover .seg-title {
+    font-size: 72px;
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+  }
+  .seg-cover .seg-sub {
+    font-size: 24px;
+    color: #aaa;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+  }
+  .seg-cover .seg-meta {
+    font-size: 16px;
+    color: #666;
+    letter-spacing: 3px;
+  }
+
+  /* ===== 签到页（slide 0）专用蓝紫渐变背景 ===== */
+  .slide.checkin-cover {
+    background: linear-gradient(135deg, #4a7fc1 0%, #6b8fd4 35%, #8e9ed8 70%, #b8a8db 100%);
+    overflow: hidden;
+  }
+  .slide.checkin-cover::before {
+    content: "";
+    position: absolute;
+    right: -100px; bottom: -100px;
+    width: 500px; height: 500px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+    filter: blur(40px);
+    pointer-events: none;
+  }
+  .slide.checkin-cover::after {
+    content: "";
+    position: absolute;
+    left: 40%; top: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .slide.checkin-cover > * {
+    position: relative;
+    z-index: 2;
+  }
+</style>
+</head>
+<body>
+
+<!-- 段索引 -->
+<div class="seg-indicator">
+  <div class="dot" data-seg="0"></div>
+  <div class="dot" data-seg="1"></div>
+  <div class="dot" data-seg="2"></div>
+  <div class="dot" data-seg="3"></div>
+  <div class="dot" data-seg="4"></div>
+  <div class="dot" data-seg="5"></div>
+  <div class="dot" data-seg="6"></div>
+</div>
+
+<!-- ============================== -->
+<!-- 签到页（slide 0 · 公司分享要求 · 14:30 前展示） -->
+<!-- ============================== -->
+<div class="slide active checkin-cover" data-seg="0" style="padding:60px 90px;">
+  <!-- 顶部小标签 -->
+  <div style="display:inline-block; background:rgba(255,255,255,0.16); color:#fff; padding:8px 20px; border-radius:20px; font-size:15px; letter-spacing:2px; margin-bottom:32px; align-self:flex-start;">
+    CDG AI 提效进行时
+  </div>
+
+  <!-- 左右两栏布局 -->
+  <div style="display:grid; grid-template-columns: 1.35fr 1fr; gap:60px; align-items:center; flex:1;">
+
+    <!-- 左侧：标题 + 5 条 agenda + 嘉宾 -->
+    <div>
+      <h1 style="font-size:46px; line-height:1.35; color:#fff; margin-bottom:40px; font-weight:700;">
+        AI 赋能业务判断力——<br>
+        一线业务岗的<span style="color:#f5d77a;">91天</span>实战
+      </h1>
+
+      <!-- 5 条 agenda -->
+      <div style="display:flex; flex-direction:column; gap:18px; margin-bottom:48px;">
+        <div style="display:flex; align-items:center; gap:16px;">
+          <div style="width:32px; height:32px; background:rgba(245,215,122,0.18); border:1px solid #f5d77a; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#f5d77a; font-size:14px; font-weight:600; flex-shrink:0;">01</div>
+          <div style="color:#e8e8e8; font-size:17px; line-height:1.6;"><span style="color:#fff; font-weight:600;">现状洞察：</span>业务岗 AI 应用的真实现状与突破瓶颈之道</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px;">
+          <div style="width:32px; height:32px; background:rgba(245,215,122,0.18); border:1px solid #f5d77a; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#f5d77a; font-size:14px; font-weight:600; flex-shrink:0;">02</div>
+          <div style="color:#e8e8e8; font-size:17px; line-height:1.6;"><span style="color:#fff; font-weight:600;">方法论框架：</span>判断力训练循环：直觉 → 校验 → 放大 → 复盘</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px;">
+          <div style="width:32px; height:32px; background:rgba(245,215,122,0.18); border:1px solid #f5d77a; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#f5d77a; font-size:14px; font-weight:600; flex-shrink:0;">03</div>
+          <div style="color:#e8e8e8; font-size:17px; line-height:1.6;"><span style="color:#fff; font-weight:600;">实战案例：</span>5 个真实跑通的业务场景深度复盘</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px;">
+          <div style="width:32px; height:32px; background:rgba(245,215,122,0.18); border:1px solid #f5d77a; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#f5d77a; font-size:14px; font-weight:600; flex-shrink:0;">04</div>
+          <div style="color:#e8e8e8; font-size:17px; line-height:1.6;"><span style="color:#fff; font-weight:600;">避坑指南：</span>3 个 AI 协同的常见陷阱 + 2 个 AI 当前学不会的事</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px;">
+          <div style="width:32px; height:32px; background:rgba(245,215,122,0.18); border:1px solid #f5d77a; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#f5d77a; font-size:14px; font-weight:600; flex-shrink:0;">05</div>
+          <div style="color:#e8e8e8; font-size:17px; line-height:1.6;"><span style="color:#fff; font-weight:600;">工具赋能：</span>可直接带走的实战工具包：角色定位卡 / 全域作战图 / Pre-meeting 换位独白</div>
+        </div>
+      </div>
+
+      <!-- 嘉宾信息 -->
+      <div style="display:flex; align-items:center; gap:16px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.12);">
+        <!-- 头像（放 images-v0.6/carmen-avatar.png 即可自动显示，否则 fallback 到金色"伍"字圆） -->
+        <div style="width:52px; height:52px; border-radius:50%; overflow:hidden; flex-shrink:0; background:linear-gradient(135deg, #f5d77a, #d4a542); display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+          <img src="images-v0.6/carmen-avatar.png"
+               alt="Carmen 头像"
+               style="width:100%; height:100%; object-fit:cover; display:block;"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div style="display:none; width:100%; height:100%; align-items:center; justify-content:center; color:#0a0a0a; font-weight:700; font-size:20px;">伍</div>
+        </div>
+        <div>
+          <div style="color:#fff; font-size:18px; font-weight:600; letter-spacing:1px;">
+            分享嘉宾：　<span style="color:#f5d77a;">carmennwu（伍敏）</span>
+          </div>
+          <div style="color:#aaa; font-size:14px; margin-top:4px;">AMS / 商品消费业务部 / 食品饮料一中心</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧：签到二维码 -->
+    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+      <div style="background:#fff; padding:24px; border-radius:14px; box-shadow:0 8px 32px rgba(0,0,0,0.4); margin-bottom:20px;">
+        <!-- 二维码图片占位（把官方签到码放到 images-v0.6/checkin-qr.png 即可自动显示） -->
+        <img src="images-v0.6/checkin-qr.png"
+             alt="请扫码签到"
+             style="display:block; width:280px; height:280px; object-fit:contain;"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div style="display:none; width:280px; height:280px; border:2px dashed #999; border-radius:8px; flex-direction:column; align-items:center; justify-content:center; color:#666; font-size:14px; text-align:center; padding:20px;">
+          <div style="font-size:36px; margin-bottom:12px;">📷</div>
+          <div style="line-height:1.6;">
+            请将官方签到二维码<br>
+            另存为<br>
+            <code style="background:#f0f0f0; padding:2px 8px; border-radius:4px; color:#d33; font-size:12px; margin-top:8px; display:inline-block;">images-v0.6/checkin-qr.png</code>
+          </div>
+        </div>
+      </div>
+      <div style="color:#f5d77a; font-size:20px; font-weight:600; letter-spacing:4px;">请扫码签到</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- 原封面页（slide 1）            -->
+<!-- ============================== -->
+<div class="slide" data-seg="0">
+  <div class="seg-tag">2026 · 06 · 09</div>
+  <h1 style="font-size: 64px;">AI 赋能业务判断力</h1>
+  <h2 style="font-size: 36px; color: #f5d77a; margin-bottom: 40px;">一线业务岗的 91 天实战</h2>
+  <div class="body-text" style="font-size: 19px; color: #aaa;">
+    <p>AMS 商品消费业务部　·　食品饮料一中心　·　膳食行业直客</p>
+    <p style="margin-top: 12px; color: #f5d77a; letter-spacing: 1px;">carmennwu</p>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- 段1 封面（slide 1）            -->
+<!-- ============================== -->
+<div class="slide seg-cover" data-seg="1">
+  <div class="seg-num">PART　ONE</div>
+  <div class="seg-title">我是谁 · 我在做什么</div>
+</div>
+
+<!-- 1.0 通用职场骨架页（新增 · 让非 AMS 听众先抓总图） -->
+<div class="slide" data-seg="1">
+  <div class="seg-tag emphasis">段 1 · 1.0　先讲方法 · 再讲我的故事</div>
+
+  <div style="text-align:center; color:#f5d77a; font-size:1.9em; margin-bottom:44px; letter-spacing:4px; font-weight:600;">
+    通用工作 SOP
+  </div>
+
+  <!-- 8 件事横向流 · 大字饱满版 -->
+  <div style="display:grid; grid-template-columns: repeat(8, 1fr); gap:12px; margin-bottom:48px;">
+    <div style="background:#141414; border:1.2px solid #ff5252; border-radius:10px; padding:22px 8px; text-align:center; box-shadow:0 0 12px rgba(255,82,82,0.14);">
+      <div style="color:#ff5252; font-size:1.15em; letter-spacing:2px; margin-bottom:12px; font-weight:600;">① 看盘</div>
+      <div style="color:#e8e8e8; font-size:1.05em; line-height:1.6;">打开数据<br>抓今天异常</div>
+    </div>
+    <div style="background:#141414; border:1.2px solid #ff5252; border-radius:10px; padding:22px 8px; text-align:center; box-shadow:0 0 12px rgba(255,82,82,0.14);">
+      <div style="color:#ff5252; font-size:1.15em; letter-spacing:2px; margin-bottom:12px; font-weight:600;">② 选战</div>
+      <div style="color:#e8e8e8; font-size:1.05em; line-height:1.6;">本周做什么<br>拍优先级</div>
+    </div>
+    <div style="background:#141414; border:1.2px solid #ff5252; border-radius:10px; padding:22px 8px; text-align:center; box-shadow:0 0 12px rgba(255,82,82,0.14);">
+      <div style="color:#ff5252; font-size:1.15em; letter-spacing:2px; margin-bottom:12px; font-weight:600;">③ 备战</div>
+      <div style="color:#e8e8e8; font-size:1.05em; line-height:1.6;">见关键人前<br>的准备</div>
+    </div>
+    <div style="background:#141414; border:2px solid #4ade80; border-radius:10px; padding:22px 8px; text-align:center; box-shadow:0 0 18px rgba(74,222,128,0.22);">
+      <div style="color:#4ade80; font-size:1.15em; letter-spacing:2px; margin-bottom:12px; font-weight:600;">④ 打仗</div>
+      <div style="color:#e8e8e8; font-size:1.05em; line-height:1.6;">见关键人<br>现场交付</div>
+    </div>
+    <div style="background:#141414; border:1.2px solid #ff5252; border-radius:10px; padding:22px 8px; text-align:center; box-shadow:0 0 12px rgba(255,82,82,0.14);">
+      <div style="color:#ff5252; font-size:1.15em; letter-spacing:2px; margin-bottom:12px; font-weight:600;">⑤ 收数</div>
+      <div style="color:#e8e8e8; font-size:1.05em; line-height:1.6;">收数据<br>出报表</div>
+    </div>
+    <div style="background:#141414; border:2px solid #4ade80; border-radius:10px; padding:22px 8px; text-align:center; box-shadow:0 0 18px rgba(74,222,128,0.22);">
+      <div style="color:#4ade80; font-size:1.15em; letter-spacing:2px; margin-bottom:12px; font-weight:600;">⑥ 复盘</div>
+      <div style="color:#e8e8e8; font-size:1.05em; line-height:1.6;">为什么这样<br>串因果</div>
+    </div>
+    <div style="background:#141414; border:1.2px solid #ff5252; border-radius:10px; padding:22px 8px; text-align:center; box-shadow:0 0 12px rgba(255,82,82,0.14);">
+      <div style="color:#ff5252; font-size:1.15em; letter-spacing:2px; margin-bottom:12px; font-weight:600;">⑦ 汇报</div>
+      <div style="color:#e8e8e8; font-size:1.05em; line-height:1.6;">写周报月报<br>对外讲故事</div>
+    </div>
+    <div style="background:#141414; border:2px solid #4ade80; border-radius:10px; padding:22px 8px; text-align:center; box-shadow:0 0 18px rgba(74,222,128,0.22);">
+      <div style="color:#4ade80; font-size:1.15em; letter-spacing:2px; margin-bottom:12px; font-weight:600;">⑧ 沉淀</div>
+      <div style="color:#e8e8e8; font-size:1.05em; line-height:1.6;">写方法论<br>给下次用</div>
+    </div>
+  </div>
+
+  <!-- AI 时代的核心命题 -->
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:32px; padding:0 40px;">
+    <div style="background:#141414; border:2px solid #ff5252; border-radius:12px; padding:32px 36px; box-shadow:0 0 20px rgba(255,82,82,0.18);">
+      <div style="color:#ff5252; font-size:1.4em; margin-bottom:18px; letter-spacing:2.5px; font-weight:600;">🔴 5 件 · 做的过程</div>
+      <div style="color:#e8e8e8; font-size:1.2em; line-height:1.8;">
+        看盘 · 选战 · 备战 · 收数 · 汇报<br>
+        <span style="color:#a8a8a8; font-size:0.88em;">→ 这些事"做"本身没杠杆 · <span class="gold">AI 替你做完就行</span></span>
+      </div>
+    </div>
+    <div style="background:#141414; border:2px solid #4ade80; border-radius:12px; padding:32px 36px; box-shadow:0 0 20px rgba(74,222,128,0.18);">
+      <div style="color:#4ade80; font-size:1.4em; margin-bottom:18px; letter-spacing:2.5px; font-weight:600;">🟢 3 件 · 长能力的过程</div>
+      <div style="color:#e8e8e8; font-size:1.2em; line-height:1.8;">
+        打仗 · 复盘 · 沉淀<br>
+        <span style="color:#a8a8a8; font-size:0.88em;">→ 这些事才是真正长出"你"的部分 · <span class="gold">AI 把你推上去</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 1.1 自我介绍 + 职责树 + 工作主干（slide 3） -->
+<div class="slide" data-seg="1">
+  <div class="seg-tag emphasis">段 1 · 1.1　我是谁 · 我在做什么 · 我怎么做</div>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:32px; align-items:stretch;">
+
+    <!-- 左：职责树 -->
+    <div style="display:flex; flex-direction:column;">
+      <div style="color:#f5d77a; font-size:0.95em; margin-bottom:12px; letter-spacing:2px; font-weight:600;">▎ 我的职责树</div>
+      <div class="ascii-block" style="font-size:0.95em; line-height:1.55; margin:0; padding:18px 14px; text-align:center; flex:1; display:flex; align-items:center; justify-content:center;">
+<pre style="display:inline-block; text-align:left; margin:0;">          <span class="gold">【顶层职责】</span>
+       <span class="gold">帮膳食行业头部商家</span>
+       <span class="gold">把生意做大、做扎实</span>
+                │
+      ┌─────────┴─────────┐
+      ▼                   ▼
+ <span class="gold">【主战场】</span>          <span class="gold">【延伸场】</span>
+ 腾讯内部生意         辐射全域生意
+ (投放/小店/直播)    (品牌资产沉淀)
+      │                   │
+      └─────────┬─────────┘
+                │
+      ┌─────────┴─────────┐
+      ▼                   ▼
+ <span class="gold">经营力分支</span>          <span class="gold">内容力分支</span>
+ (生意经营提升)      (公域影响力提升)
+      │                   │
+ 服务 KPI：           服务 KPI：
+ ① 头部消耗           ③ 品牌大场
+ ② ARPU 冲高          ④ 内容力专项
+ ⑤ 经营力专项           (互选/IP/直播)
+ ⑦ 新玩法/新模式
+ ⑧ 老客留存
+      │                   │
+      └─────────┬─────────┘
+                ▼
+    <span class="gold">【贯穿两个分支的横轴】</span>
+    <span class="gold">　行业发展风控把关　</span></pre>
+      </div>
+    </div>
+
+    <!-- 右：8 步主干闭环 + 频次表 -->
+    <div style="display:flex; flex-direction:column;">
+      <div style="color:#f5d77a; font-size:0.95em; margin-bottom:12px; letter-spacing:2px; font-weight:600;">▎ 行业直客岗真实运转主干 · 8 步闭环</div>
+      <div class="ascii-block" style="font-size:0.92em; line-height:1.6; margin:0 0 14px 0; padding:16px 14px; text-align:center;">
+<pre style="display:inline-block; text-align:left; margin:0;"> ① 看盘 → ② 选战 → ③ 备战 → ④ 打仗 → ⑤ 收数
+                                           │
+                                           ▼
+ ⑧ 沉淀回灌 ← ⑦ 汇报 ← ⑥ 复盘 ←──────────┘
+        │
+        └─→ 喂回 ① 看盘<span class="gold">（形成闭环）</span></pre>
+      </div>
+
+      <table style="width:100%; font-size:0.74em; border-collapse:collapse; color:#d4d4d4; flex:1;">
+        <thead>
+          <tr style="color:#f5d77a; border-bottom:1.2px solid #f5d77a;">
+            <th style="text-align:left; padding:5px 8px; font-weight:normal; letter-spacing:1px;">步骤</th>
+            <th style="text-align:left; padding:5px 8px; font-weight:normal; letter-spacing:1px;">通用版（任何岗位）</th>
+            <th style="text-align:left; padding:5px 8px; font-weight:normal; letter-spacing:1px;">我的版（销售岗）</th>
+            <th style="text-align:left; padding:5px 8px; font-weight:normal; letter-spacing:1px;">频次</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #2a2a2a;"><td style="padding:4px 8px;"><span class="gold">① 看盘</span></td><td style="padding:4px 8px; color:#bbb;">打开数据 · 抓今天异常</td><td style="padding:4px 8px;">大盘消耗 / 8 KPI / 竞品 / 客户日耗</td><td style="padding:4px 8px;" class="dim">每天</td></tr>
+          <tr style="border-bottom:1px solid #2a2a2a;"><td style="padding:4px 8px;"><span class="gold">② 选战</span></td><td style="padding:4px 8px; color:#bbb;">本周做什么 · 拍优先级</td><td style="padding:4px 8px;">打哪个客户 / 什么议题 / 投多少</td><td style="padding:4px 8px;" class="dim">每周一</td></tr>
+          <tr style="border-bottom:1px solid #2a2a2a;"><td style="padding:4px 8px;"><span class="gold">③ 备战</span></td><td style="padding:4px 8px; color:#bbb;">关键会议/汇报前的准备</td><td style="padding:4px 8px;">客户档案 / 定位卡 / 作战图 / 独白</td><td style="padding:4px 8px;" class="dim">见客前 1-2 天</td></tr>
+          <tr style="border-bottom:1px solid #2a2a2a;"><td style="padding:4px 8px;"><span class="gold">④ 打仗</span></td><td style="padding:4px 8px; color:#bbb;">见关键人 · 现场交付</td><td style="padding:4px 8px;">见客户 / 拉通 / 节点大场 / 救场</td><td style="padding:4px 8px;" class="dim">全周高频</td></tr>
+          <tr style="border-bottom:1px solid #2a2a2a;"><td style="padding:4px 8px;"><span class="gold">⑤ 收数</span></td><td style="padding:4px 8px; color:#bbb;">收数据出报表</td><td style="padding:4px 8px;">双周 CSV / 客户日耗 / 归因 / GMV</td><td style="padding:4px 8px;" class="dim">每双周日</td></tr>
+          <tr style="border-bottom:1px solid #2a2a2a;"><td style="padding:4px 8px;"><span class="gold">⑥ 复盘</span></td><td style="padding:4px 8px; color:#bbb;">为什么这样 · 串因果</td><td style="padding:4px 8px;">谁起了 / 谁跌了 / 为什么 / 学到什么</td><td style="padding:4px 8px;" class="dim">每双周日晚</td></tr>
+          <tr style="border-bottom:1px solid #2a2a2a;"><td style="padding:4px 8px;"><span class="gold">⑦ 汇报</span></td><td style="padding:4px 8px; color:#bbb;">写周报/月报 · 对外讲故事</td><td style="padding:4px 8px;">双周报 / 月会 / 临时问 / 客户短报</td><td style="padding:4px 8px;" class="dim">每双周一</td></tr>
+          <tr><td style="padding:4px 8px;"><span class="gold">⑧ 沉淀</span></td><td style="padding:4px 8px; color:#bbb;">写方法论 · 给下次用</td><td style="padding:4px 8px;">方法论入库 / 档案更新 / Memory / 规则</td><td style="padding:4px 8px;" class="dim">每月末</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="key-quote" style="margin-top:22px; font-size:30px; letter-spacing:3px;">
+    🌱 OKR 决定了 AI 的生长土壤 ✨
+  </div>
+</div>
+
+<!-- 1.2 工作节奏页已删除 · 内容与 1.1 右下角"8 步频次表"重合 -->
+
+<!-- 1.4 过渡 → PART TWO 封面（slide 5） -->
+<div class="slide seg-cover" data-seg="2">
+  <div class="seg-num">PART　TWO</div>
+  <div class="seg-title">AI 介入之后<br>时间被放到哪了</div>
+</div>
+
+<!-- ============================== -->
+<!-- 段2 内容起点（工作流 → Agent 映射） -->
+<!-- ============================== -->
+
+<!-- 2.2 + 2.3 合并 · 上：工作流图 / 下：每步嵌哪个 AI（方便上下对比） -->
+<div class="slide" data-seg="2">
+  <div class="seg-tag emphasis">段 2 · 2.1　工作流 ←→ AI 嵌在哪 · 上下对照</div>
+
+  <!-- ===== 上半：工作流横向 8 步（字号放大版） ===== -->
+  <div style="color:#f5d77a; font-size:0.95em; margin:0 0 10px 0; letter-spacing:1.5px; font-weight:600;">▎ 上半：先有工作流 · 8 步闭环（按真实周历）</div>
+  <div class="ascii-block" style="font-size:1.05em; line-height:1.7; padding:22px 24px; margin:0 0 22px 0; text-align:center;">
+<pre style="display:inline-block; text-align:left; margin:0;"><span class="gold">┌──── 日常作战段 ────┬── 双周交付段 ──┬── 月度沉淀 ──┐</span>
+   周一    周二~周五    │  双周六  双周日  双周一│  月最后一周
+    ▼         ▼         │    ▼      ▼      ▼   │     ▼
+
+ ① 看盘 → ② 选战 → ③ 备战 → ④ 打仗 → ⑤ 收数 → ⑥ 复盘 → ⑦ 汇报
+                                                          │
+    ▲                                                     ▼
+    └──── 喂回 ① 看盘 · 形成闭环 ←─ ⑧ 沉淀回灌 ←──────────┘</pre>
+  </div>
+
+  <!-- ===== 下半：每步嵌哪个 AI（通用版 + 我搭的 Agent） ===== -->
+  <div style="color:#f5d77a; font-size:0.95em; margin:6px 0 10px 0; letter-spacing:1.5px; font-weight:600;">▎ 下半：每一步嵌一个 AI 帮手（任何岗位都能照搭）</div>
+  <div style="padding:0 8px;">
+    <table style="width:100%; font-size:0.88em; border-collapse:collapse; color:#d4d4d4;">
+      <thead>
+        <tr style="color:#f5d77a; border-bottom:1.2px solid #f5d77a;">
+          <th style="text-align:left; padding:7px 12px; font-weight:normal; letter-spacing:1px; width:14%;">工作流步骤</th>
+          <th style="text-align:left; padding:7px 12px; font-weight:normal; letter-spacing:1px;">通用版 AI 帮手（任何岗位都能搭）</th>
+          <th style="text-align:left; padding:7px 12px; font-weight:normal; letter-spacing:1px;">我搭的 Agent（销售岗实例）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #2a2a2a;"><td style="padding:7px 12px;"><span class="gold">① 看盘</span></td><td style="padding:7px 12px;">数据小助手 · 每天扫异常</td><td style="padding:7px 12px; color:#bbb;">01 市场洞察 + 03 生意军师</td></tr>
+        <tr style="border-bottom:1px solid #2a2a2a;"><td style="padding:7px 12px;"><span class="gold">② 选战</span></td><td style="padding:7px 12px;">优先级助手 · 拍本周做什么</td><td style="padding:7px 12px; color:#bbb;">02 生意合伙人</td></tr>
+        <tr style="border-bottom:1px solid #2a2a2a;"><td style="padding:7px 12px;"><span class="gold">③ 备战</span></td><td style="padding:7px 12px;">备战助手 · 出一页纸资料</td><td style="padding:7px 12px; color:#bbb;">02 生意合伙人 + 08 品牌共建师</td></tr>
+        <tr style="background:rgba(74,222,128,0.06); border-bottom:1px solid #2a2a2a;"><td style="padding:7px 12px;"><span style="color:#4ade80;">④ 打仗</span></td><td style="padding:7px 12px;">现场副驾 · 救场剧本 + 合规扫雷</td><td style="padding:7px 12px; color:#bbb;">05 生意守门人 + 02 生意合伙人</td></tr>
+        <tr style="border-bottom:1px solid #2a2a2a;"><td style="padding:7px 12px;"><span class="gold">⑤ 收数</span></td><td style="padding:7px 12px;">收数助手 · 一键直出报表</td><td style="padding:7px 12px; color:#bbb;">03 生意军师（脚本化宽表）</td></tr>
+        <tr style="background:rgba(74,222,128,0.06); border-bottom:1px solid #2a2a2a;"><td style="padding:7px 12px;"><span style="color:#4ade80;">⑥ 复盘</span></td><td style="padding:7px 12px;">复盘助手 · 串因果链</td><td style="padding:7px 12px; color:#bbb;">03 生意军师 + 06 汇报参谋</td></tr>
+        <tr style="border-bottom:1px solid #2a2a2a;"><td style="padding:7px 12px;"><span class="gold">⑦ 汇报</span></td><td style="padding:7px 12px;">汇报助手 · 格式化稿 + 红线扫</td><td style="padding:7px 12px; color:#bbb;">06 汇报参谋（双周报+月会）</td></tr>
+        <tr style="background:rgba(74,222,128,0.06);"><td style="padding:7px 12px;"><span style="color:#4ade80;">⑧ 沉淀</span></td><td style="padding:7px 12px; color:#f5d77a;">你自己来 · AI 只能辅助 · 不代写战略</td><td style="padding:7px 12px; color:#f5d77a;">Carmen 主导 · AI 不接手</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="key-quote" style="margin-top:18px; font-size:20px; letter-spacing:2px;">
+    🌱 不是先创造 Agent · 是先有工作流 · AI 才慢慢长出来
+  </div>
+</div>
+
+
+<!-- 2.4 工作台三件套 · Agent / 知识库 / 客户实战 三栏截图 -->
+<div class="slide" data-seg="2">
+  <div class="seg-tag emphasis">段 2 · 2.2　工作台三件套 · 这就是我每天的"作战桌"</div>
+
+  <div style="text-align:center; color:#d4d4d4; font-size:1em; margin-bottom:18px; letter-spacing:1.5px;">
+    左边 <span class="gold">Agent 矩阵</span>　·　中间 <span class="gold">知识库分区</span>　·　右边 <span class="gold">客户实战交付</span>
+  </div>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:22px; padding:0 8px;">
+
+    <!-- 左：Agent 矩阵 -->
+    <div style="background:#141414; border:1.5px solid #f5d77a; border-radius:10px; padding:14px; box-shadow:0 0 14px rgba(245,215,122,0.12);">
+      <div style="color:#f5d77a; font-size:0.95em; margin-bottom:10px; letter-spacing:1.5px; text-align:center; font-weight:600;">🤖 6 个 Agent</div>
+      <div style="background:#0a0a0a; border-radius:6px; padding:6px; text-align:center;">
+        <img src="images-v0.6/agent-list1.png" alt="agent 矩阵" style="width:100%; max-height:340px; object-fit:contain; border-radius:4px;" />
+      </div>
+      <div style="color:#a8a8a8; font-size:0.78em; margin-top:10px; line-height:1.55; text-align:center;">
+        每个 Agent = 一个<span class="gold">思维视角</span><br>不是按功能拆 · 是按"换谁的脑子"
+      </div>
+    </div>
+
+    <!-- 中：知识库 -->
+    <div style="background:#141414; border:1.5px solid #f5d77a; border-radius:10px; padding:14px; box-shadow:0 0 14px rgba(245,215,122,0.12);">
+      <div style="color:#f5d77a; font-size:0.95em; margin-bottom:10px; letter-spacing:1.5px; text-align:center; font-weight:600;">📚 10 个分区知识库</div>
+      <div style="background:#0a0a0a; border-radius:6px; padding:6px; text-align:center;">
+        <img src="images-v0.6/agent-list2.png" alt="知识库分区" style="width:100%; max-height:340px; object-fit:contain; border-radius:4px;" />
+      </div>
+      <div style="color:#a8a8a8; font-size:0.78em; margin-top:10px; line-height:1.55; text-align:center;">
+        每件事都有"<span class="gold">该放哪</span>"<br>不是堆文件 · 是按工作流分仓
+      </div>
+    </div>
+
+    <!-- 右：客户实战材料 -->
+    <div style="background:#141414; border:1.5px solid #f5d77a; border-radius:10px; padding:14px; box-shadow:0 0 14px rgba(245,215,122,0.12);">
+      <div style="color:#f5d77a; font-size:0.95em; margin-bottom:10px; letter-spacing:1.5px; text-align:center; font-weight:600;">⚔️ 客户实战交付</div>
+      <div style="background:#0a0a0a; border-radius:6px; padding:6px; text-align:center;">
+        <img src="images-v0.6/agent-list3.png" alt="客户实战材料" style="width:100%; max-height:340px; object-fit:contain; border-radius:4px;" />
+      </div>
+      <div style="color:#a8a8a8; font-size:0.78em; margin-top:10px; line-height:1.55; text-align:center;">
+        每一份都是<span class="gold">打仗用的弹药</span><br>不是 PPT 模板 · 是真实交付物
+      </div>
+    </div>
+
+  </div>
+
+  <div class="key-quote" style="margin-top:20px; font-size:22px; letter-spacing:2.5px;">
+    🌱 Agent + 知识库 + 实战材料 · 三件套合起来才是工作台
+  </div>
+</div>
+
+
+<!-- ============================== -->
+<!-- 段3 封面（slide 8）            -->
+<!-- ============================== -->
+<div class="slide seg-cover" data-seg="3">
+  <div class="seg-num">PART　THREE</div>
+  <div class="seg-title">应用前后对比</div>
+</div>
+
+<!-- 3.1 时间上的变化（slide 9） -->
+<div class="slide" data-seg="3">
+  <div class="seg-tag emphasis">段 3 · 3.1　先看看时间上的变化</div>
+
+  <!-- 痛点钩子 · 自我反问 -->
+  <div style="text-align:center; margin:-6px 0 18px; padding:14px 22px; background:linear-gradient(135deg,rgba(255,82,82,0.06),rgba(74,222,128,0.04)); border:1px dashed #3a3a3a; border-radius:8px;">
+    <div style="color:#888; font-size:0.95em; letter-spacing:1px; margin-bottom:6px;">那时候我以为这就是直客岗的命——</div>
+    <div style="color:#d4d4d4; font-size:1em; letter-spacing:1.5px;">
+      <span style="color:#ff5252; font-weight:600;">40% 时间</span>收集材料 / 反复修改　·　<span style="color:#ff5252; font-weight:600;">2% 时间</span>复盘画因果链　·　<span style="color:#ff5252; font-weight:600;">2% 时间</span>沉淀方法论
+    </div>
+    <div style="color:#f5d77a; font-size:0.92em; margin-top:8px; letter-spacing:1px;">现在 · 这个分布被 AI 整个翻过来了</div>
+  </div>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:40px; padding:0 20px 0;">
+
+    <!-- 左：过去时间饼图 -->
+    <div>
+      <div style="color:#f5d77a; font-size:1.05em; letter-spacing:2px; margin-bottom:18px;">过去时间饼图：</div>
+      <div style="font-family: 'Courier New', monospace; font-size:0.95em; line-height:2.1;">
+        <!-- 🔴 被节省时间（5 项）-->
+        <div style="border:1.5px solid #ff5252; border-radius:6px; padding:6px 8px; margin-bottom:8px; box-shadow:0 0 10px rgba(255,82,82,0.2); position:relative;">
+          <div style="position:absolute; top:-9px; left:10px; background:#0e0e0e; padding:0 6px; color:#ff5252; font-size:0.72em; letter-spacing:1.5px;">被节省时间</div>
+          <div style="display:flex; align-items:center; gap:10px; white-space:nowrap;"><span style="width:60px; color:#e8e8e8;">备战</span><span style="width:42px; color:#f5d77a; text-align:right;">33%</span><span style="color:#555;">|</span><span style="display:inline-block; height:18px; background:#5a5a5a; width:206px; border-radius:2px; flex-shrink:0;"></span><span style="color:#aaa; font-size:0.85em;">← 反复改文档/找历史档案</span></div>
+          <div style="display:flex; align-items:center; gap:10px; white-space:nowrap; margin-top:4px;"><span style="width:60px; color:#e8e8e8;">收数</span><span style="width:42px; color:#f5d77a; text-align:right;">15%</span><span style="color:#555;">|</span><span style="display:inline-block; height:18px; background:#5a5a5a; width:95px; border-radius:2px; flex-shrink:0;"></span><span style="color:#aaa; font-size:0.85em;">← 拉数 / 对齐口径</span></div>
+          <div style="display:flex; align-items:center; gap:10px; white-space:nowrap; margin-top:4px;"><span style="width:60px; color:#e8e8e8;">汇报</span><span style="width:42px; color:#f5d77a; text-align:right;">12%</span><span style="color:#555;">|</span><span style="display:inline-block; height:18px; background:#5a5a5a; width:76px; border-radius:2px; flex-shrink:0;"></span><span style="color:#aaa; font-size:0.85em;">← 套版 / 反复改</span></div>
+          <div style="display:flex; align-items:center; gap:10px; white-space:nowrap; margin-top:4px;"><span style="width:60px; color:#e8e8e8;">选战</span><span style="width:42px; color:#f5d77a; text-align:right;">5%</span><span style="color:#555;">|</span><span style="display:inline-block; height:18px; background:#5a5a5a; width:32px; border-radius:2px; flex-shrink:0;"></span><span style="color:#aaa; font-size:0.85em;">← 凭手感拍客户优先级</span></div>
+          <div style="display:flex; align-items:center; gap:10px; white-space:nowrap; margin-top:4px;"><span style="width:60px; color:#e8e8e8;">看盘</span><span style="width:42px; color:#f5d77a; text-align:right;">1%</span><span style="color:#555;">|</span><span style="display:inline-block; height:18px; background:#5a5a5a; width:7px; border-radius:2px; flex-shrink:0;"></span><span style="color:#aaa; font-size:0.85em;">← 只扫数字 / 不下钻</span></div>
+        </div>
+        <!-- 🟢 被放大效能（3 项）-->
+        <div style="border:1.5px solid #4ade80; border-radius:6px; padding:6px 8px; margin-top:6px; box-shadow:0 0 10px rgba(74,222,128,0.2); position:relative;">
+          <div style="position:absolute; top:-9px; left:10px; background:#0e0e0e; padding:0 6px; color:#4ade80; font-size:0.72em; letter-spacing:1.5px;">被放大效能</div>
+          <div style="display:flex; align-items:center; gap:10px; white-space:nowrap;"><span style="width:60px; color:#e8e8e8;">打仗</span><span style="width:42px; color:#f5d77a; text-align:right;">30%</span><span style="color:#555;">|</span><span style="display:inline-block; height:18px; background:#5a5a5a; width:190px; border-radius:2px; flex-shrink:0;"></span><span style="color:#aaa; font-size:0.85em;">← 见客户 / 现场交付</span></div>
+          <div style="display:flex; align-items:center; gap:10px; white-space:nowrap; margin-top:4px;"><span style="width:60px; color:#e8e8e8;">复盘</span><span style="width:42px; color:#f5d77a; text-align:right;">2%</span><span style="color:#555;">|</span><span style="display:inline-block; height:18px; background:#5a5a5a; width:14px; border-radius:2px; flex-shrink:0;"></span><span style="color:#aaa; font-size:0.85em;">← 双周才做 / 经常省略</span></div>
+          <div style="display:flex; align-items:center; gap:10px; white-space:nowrap; margin-top:4px;"><span style="width:60px; color:#e8e8e8;">沉淀</span><span style="width:42px; color:#f5d77a; text-align:right;">2%</span><span style="color:#555;">|</span><span style="display:inline-block; height:18px; background:#5a5a5a; width:14px; border-radius:2px; flex-shrink:0;"></span><span style="color:#aaa; font-size:0.85em;">← 月底碎片记一下</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右：现在时间饼图 -->
+    <div>
+      <div style="color:#f5d77a; font-size:1.05em; letter-spacing:2px; margin-bottom:18px;">现在时间饼图：</div>
+      <div style="font-family: 'Courier New', monospace; font-size:0.95em; line-height:2.1;">
+        <!-- 🔴 被节省时间（5 项 · 总占比从 68% → 36%）-->
+        <div style="border:1.5px solid #ff5252; border-radius:6px; padding:6px 8px; margin-bottom:8px; box-shadow:0 0 10px rgba(255,82,82,0.2); position:relative;">
+          <div style="position:absolute; top:-9px; left:10px; background:#0e0e0e; padding:0 6px; color:#ff5252; font-size:0.72em; letter-spacing:1.5px;">被节省时间</div>
+          <div style="display:flex; align-items:center; gap:10px; white-space:nowrap;"><span style="width:60px; color:#e8e8e8;">备战</span><span style="width:42px; color:#f5d77a; text-align:right;">15%</span><span style="color:#555;">|</span><span style="display:inline-block; height:18px; background:linear-gradient(90deg,#f5d77a,#d4a93e); width:94px; border-radius:2px; box-shadow:0 0 8px rgba(245,215,122,0.3); flex-shrink:0;"></span><span style="color:#f5d77a; font-size:0.85em;">← 02 合伙人吐三件套</span></div>
+          <div style="display:flex; align-items:center; gap:10px; white-space:nowrap; margin-top:4px;"><span style="width:60px; color:#e8e8e8;">收数</span><span style="width:42px; color:#f5d77a; text-align:right;">8%</span><span style="color:#555;">|</span><span style="display:inline-block; height:18px; background:linear-gradient(90deg,#f5d77a,#d4a93e); width:50px; border-radius:2px; box-shadow:0 0 8px rgba(245,215,122,0.3); flex-shrink:0;"></span><span style="color:#f5d77a; font-size:0.85em;">← 03 军师一键宽表</span></div>
+          <div style="display:flex; align-items:center; gap:10px; white-space:nowrap; margin-top:4px;"><span style="width:60px; color:#e8e8e8;">汇报</span><span style="width:42px; color:#f5d77a; text-align:right;">7%</span><span style="color:#555;">|</span><span style="display:inline-block; height:18px; background:linear-gradient(90deg,#f5d77a,#d4a93e); width:44px; border-radius:2px; box-shadow:0 0 8px rgba(245,215,122,0.3); flex-shrink:0;"></span><span style="color:#f5d77a; font-size:0.85em;">← 06 汇报参谋</span></div>
+          <div style="display:flex; align-items:center; gap:10px; white-space:nowrap; margin-top:4px;"><span style="width:60px; color:#e8e8e8;">选战</span><span style="width:42px; color:#f5d77a; text-align:right;">3%</span><span style="color:#555;">|</span><span style="display:inline-block; height:18px; background:linear-gradient(90deg,#f5d77a,#d4a93e); width:20px; border-radius:2px; box-shadow:0 0 8px rgba(245,215,122,0.3); flex-shrink:0;"></span><span style="color:#f5d77a; font-size:0.85em;">← 02 合伙人优先级</span></div>
+          <div style="display:flex; align-items:center; gap:10px; white-space:nowrap; margin-top:4px;"><span style="width:60px; color:#e8e8e8;">看盘</span><span style="width:42px; color:#f5d77a; text-align:right;">3%</span><span style="color:#555;">|</span><span style="display:inline-block; height:18px; background:linear-gradient(90deg,#f5d77a,#d4a93e); width:20px; border-radius:2px; box-shadow:0 0 8px rgba(245,215,122,0.3); flex-shrink:0;"></span><span style="color:#f5d77a; font-size:0.85em;">← 03 军师日级飘红</span></div>
+        </div>
+        <!-- 🟢 被放大效能（3 项 · 总占比从 32% → 64%）-->
+        <div style="border:1.5px solid #4ade80; border-radius:6px; padding:6px 8px; margin-top:6px; box-shadow:0 0 10px rgba(74,222,128,0.2); position:relative;">
+          <div style="position:absolute; top:-9px; left:10px; background:#0e0e0e; padding:0 6px; color:#4ade80; font-size:0.72em; letter-spacing:1.5px;">被放大效能</div>
+          <div style="display:flex; align-items:center; gap:10px; white-space:nowrap;"><span style="width:60px; color:#e8e8e8;">打仗</span><span style="width:42px; color:#f5d77a; text-align:right;">45%</span><span style="color:#555;">|</span><span style="display:inline-block; height:18px; background:linear-gradient(90deg,#4ade80,#22a85a); width:280px; border-radius:2px; box-shadow:0 0 8px rgba(74,222,128,0.3); flex-shrink:0;"></span><span style="color:#4ade80; font-size:0.85em;">← 多打 · 准备更深</span></div>
+          <div style="display:flex; align-items:center; gap:10px; white-space:nowrap; margin-top:4px;"><span style="width:60px; color:#e8e8e8;">复盘</span><span style="width:42px; color:#f5d77a; text-align:right;">11%</span><span style="color:#555;">|</span><span style="display:inline-block; height:18px; background:linear-gradient(90deg,#4ade80,#22a85a); width:70px; border-radius:2px; box-shadow:0 0 8px rgba(74,222,128,0.3); flex-shrink:0;"></span><span style="color:#4ade80; font-size:0.85em;">← 每双周稳定串因果链</span></div>
+          <div style="display:flex; align-items:center; gap:10px; white-space:nowrap; margin-top:4px;"><span style="width:60px; color:#e8e8e8;">沉淀</span><span style="width:42px; color:#f5d77a; text-align:right;">8%</span><span style="color:#555;">|</span><span style="display:inline-block; height:18px; background:linear-gradient(90deg,#4ade80,#22a85a); width:50px; border-radius:2px; box-shadow:0 0 8px rgba(74,222,128,0.3); flex-shrink:0;"></span><span style="color:#4ade80; font-size:0.85em;">← 月底固定做</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="key-quote" style="margin-top:28px; font-size:24px; letter-spacing:2px;">
+    真正的提效 · 不是"做得更快" · 是"把时间放回该花的地方"
+  </div>
+</div>
+
+<!-- slide 10 已删除 -->
+
+<!-- 3.3 被削掉的 · 备战 / 收数 / 汇报（slide 11） -->
+<!-- 3.3 被节省时间的 · v3 极简版（每卡 3 行） -->
+<div class="slide" data-seg="3">
+  <div class="seg-tag emphasis" style="color:#ff5252; border-color:#ff5252; background:rgba(255,82,82,0.08);">段 3 · 3.2　被节省时间的</div>
+
+  <div style="text-align:center; color:#d4d4d4; font-size:1.05em; margin-bottom:8px; letter-spacing:1.5px;">
+    这五件事 <span class="gold">不是不重要</span> · 但"做的过程"没有杠杆 · 让 AI 替我做完就行
+  </div>
+  <div style="text-align:center; color:#888; font-size:0.88em; margin-bottom:26px; letter-spacing:1.5px;">
+    省下的时间 <span class="gold">不是用来休息</span> · 是 <span class="gold">放进杠杆更高的事情里</span>
+  </div>
+
+  <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap:14px; padding:0 10px;">
+
+    <!-- ① 看盘 -->
+    <div style="background:#141414; border:1px solid #3a3a3a; border-radius:10px; padding:18px 14px;">
+      <div style="color:#aaa; font-size:1em; margin-bottom:4px; letter-spacing:1.5px;">① 看盘</div>
+      <div style="color:#666; font-size:0.78em; letter-spacing:1px; margin-bottom:14px;">抓今天异常</div>
+      <div style="color:#f5d77a; font-size:1.5em; font-weight:600; margin-bottom:6px; letter-spacing:1.5px;">1% → 3%</div>
+      <div style="color:#aaa; font-size:0.82em; line-height:1.6; padding-top:10px; border-top:1px solid #2a2a2a; margin-top:8px;">
+        省下的时间 → <span class="gold">每天多预读 1 个客户</span>
+      </div>
+      <a href="https://doc.weixin.qq.com/doc/w3_AcQAYgblAHkCNb2MnJPQ7RnuA0ZGK?scode=AJEAIQdfAAoanHqTafAcQAYgblAHk" target="_blank" style="display:block; margin-top:10px; padding:6px 8px; background:rgba(74,158,255,0.1); border:1px solid rgba(74,158,255,0.35); border-radius:5px; color:#4a9eff; font-size:0.72em; text-decoration:none; letter-spacing:0.5px; line-height:1.45;">
+        📄 真实材料 →<br><span style="color:#7aaeff;">大盘竞争短报·客户专版</span>
+      </a>
+    </div>
+
+    <!-- ② 选战 -->
+    <div style="background:#141414; border:1px solid #3a3a3a; border-radius:10px; padding:18px 14px;">
+      <div style="color:#aaa; font-size:1em; margin-bottom:4px; letter-spacing:1.5px;">② 选战</div>
+      <div style="color:#666; font-size:0.78em; letter-spacing:1px; margin-bottom:14px;">拍本周优先级</div>
+      <div style="color:#f5d77a; font-size:1.5em; font-weight:600; margin-bottom:6px; letter-spacing:1.5px;">5% → 3%</div>
+      <div style="color:#aaa; font-size:0.82em; line-height:1.6; padding-top:10px; border-top:1px solid #2a2a2a; margin-top:8px;">
+        省下的时间 → <span class="gold">本周战场选得更准</span>
+      </div>
+      <a href="https://doc.weixin.qq.com/doc/w3_AcQAYgblAHkCNuiecfQvOS5uEkAWC?scode=AJEAIQdfAAohrmHNUJAcQAYgblAHk" target="_blank" style="display:block; margin-top:10px; padding:6px 8px; background:rgba(74,158,255,0.1); border:1px solid rgba(74,158,255,0.35); border-radius:5px; color:#4a9eff; font-size:0.72em; text-decoration:none; letter-spacing:0.5px; line-height:1.45;">
+        📄 真实材料 →<br><span style="color:#7aaeff;">7 天消耗恢复作战计划</span>
+      </a>
+    </div>
+
+    <!-- ③ 备战 -->
+    <div style="background:#141414; border:1px solid #3a3a3a; border-radius:10px; padding:18px 14px;">
+      <div style="color:#aaa; font-size:1em; margin-bottom:4px; letter-spacing:1.5px;">③ 备战</div>
+      <div style="color:#666; font-size:0.78em; letter-spacing:1px; margin-bottom:14px;">见关键人前准备</div>
+      <div style="color:#f5d77a; font-size:1.5em; font-weight:600; margin-bottom:6px; letter-spacing:1.5px;">33% → 15%</div>
+      <div style="color:#aaa; font-size:0.82em; line-height:1.6; padding-top:10px; border-top:1px solid #2a2a2a; margin-top:8px;">
+        省下的时间 → <span class="gold">每周多备 2 个客户</span>
+      </div>
+      <a href="../../01-重点品牌/呜咔实验室/【脱敏版】益生菌行业深度拆解-公开分享版.html" target="_blank" style="display:block; margin-top:10px; padding:6px 8px; background:rgba(74,158,255,0.1); border:1px solid rgba(74,158,255,0.35); border-radius:5px; color:#4a9eff; font-size:0.72em; text-decoration:none; letter-spacing:0.5px; line-height:1.45;">
+        📄 真实材料 →<br><span style="color:#7aaeff;">益生菌行业深度拆解</span>
+      </a>
+    </div>
+
+    <!-- ⑤ 收数 -->
+    <div style="background:#141414; border:1px solid #3a3a3a; border-radius:10px; padding:18px 14px;">
+      <div style="color:#aaa; font-size:1em; margin-bottom:4px; letter-spacing:1.5px;">⑤ 收数</div>
+      <div style="color:#666; font-size:0.78em; letter-spacing:1px; margin-bottom:14px;">汇总周期数据</div>
+      <div style="color:#f5d77a; font-size:1.5em; font-weight:600; margin-bottom:6px; letter-spacing:1.5px;">15% → 8%</div>
+      <div style="color:#aaa; font-size:0.82em; line-height:1.6; padding-top:10px; border-top:1px solid #2a2a2a; margin-top:8px;">
+        省下的时间 → <span class="gold">多产 3 份客户短报</span>
+      </div>
+      <a href="https://doc.weixin.qq.com/doc/w3_AcQAYgblAHkCNsfdhWOszTnSt1woP?scode=AJEAIQdfAAoj01ERdXAcQAYgblAHk" target="_blank" style="display:block; margin-top:10px; padding:6px 8px; background:rgba(74,158,255,0.1); border:1px solid rgba(74,158,255,0.35); border-radius:5px; color:#4a9eff; font-size:0.72em; text-decoration:none; letter-spacing:0.5px; line-height:1.45;">
+        📄 真实材料 →<br><span style="color:#7aaeff;">520·618 大促节奏表</span>
+      </a>
+    </div>
+
+    <!-- ⑦ 汇报 -->
+    <div style="background:#141414; border:1px solid #3a3a3a; border-radius:10px; padding:18px 14px;">
+      <div style="color:#aaa; font-size:1em; margin-bottom:4px; letter-spacing:1.5px;">⑦ 汇报</div>
+      <div style="color:#666; font-size:0.78em; letter-spacing:1px; margin-bottom:14px;">对外讲故事</div>
+      <div style="color:#f5d77a; font-size:1.5em; font-weight:600; margin-bottom:6px; letter-spacing:1.5px;">12% → 7%</div>
+      <div style="color:#aaa; font-size:0.82em; line-height:1.6; padding-top:10px; border-top:1px solid #2a2a2a; margin-top:8px;">
+        省下的时间 → <span class="gold">多打客户独立短报</span>
+      </div>
+      <a href="https://doc.weixin.qq.com/doc/w3_AcQAYgblAHkCN0TWEUXJSR0u7uOq6?scode=AJEAIQdfAAoGMynXHsAcQAYgblAHk" target="_blank" style="display:block; margin-top:10px; padding:6px 8px; background:rgba(74,158,255,0.1); border:1px solid rgba(74,158,255,0.35); border-radius:5px; color:#4a9eff; font-size:0.72em; text-decoration:none; letter-spacing:0.5px; line-height:1.45;">
+        📄 真实材料 →<br><span style="color:#7aaeff;">销售双周报范例</span>
+      </a>
+    </div>
+
+  </div>
+
+  <div class="key-quote" style="margin-top:32px; font-size:24px; letter-spacing:2.5px;">
+    ⏬ 削掉 30 个百分点 · 全部砸进 "杠杆更高的三件事"
+  </div>
+</div>
+
+<!-- 3.4 被放大的 · v3 极简版（每卡 3 行） -->
+<div class="slide" data-seg="3">
+  <div class="seg-tag emphasis" style="color:#4ade80; border-color:#4ade80; background:rgba(74,222,128,0.08);">段 3 · 3.3　被放大效能</div>
+
+  <div style="text-align:center; color:#d4d4d4; font-size:1.05em; margin-bottom:8px; letter-spacing:1.5px;">
+    这三件事 <span class="gold">才是真正的杠杆</span> · AI 把启动成本压到 0 · 我才敢做 / 能做 / 稳定做
+  </div>
+  <div style="text-align:center; color:#888; font-size:0.88em; margin-bottom:32px; letter-spacing:1.5px;">
+    ④ 打仗 = <span class="gold">见关键人那一刻</span>　·　⑥ 复盘 = <span class="gold">为什么会这样</span>　·　⑧ 沉淀 = <span class="gold">下次再遇到怎么办</span>
+  </div>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:24px; padding:0 30px;">
+
+    <!-- ④ 打仗 -->
+    <div style="background:#141414; border:1.5px solid #4ade80; border-radius:12px; padding:32px 26px; box-shadow:0 0 18px rgba(74,222,128,0.18); text-align:center;">
+      <div style="color:#4ade80; font-size:1.3em; margin-bottom:6px; letter-spacing:2px; font-weight:600;">⚔️  ④ 打仗</div>
+      <div style="color:#888; font-size:0.85em; letter-spacing:1.5px; margin-bottom:24px;">见关键人 · 现场判断</div>
+      <div style="color:#f5d77a; font-size:1.9em; font-weight:700; margin-bottom:8px; letter-spacing:2px;">30% → 45%</div>
+      <div style="color:#aaa; font-size:0.9em; line-height:1.7; padding-top:18px; border-top:1px solid #2a2a2a; margin-top:14px;">
+        每周打仗场次 <span class="gold">增加 50%</span>
+      </div>
+      <a href="https://doc.weixin.qq.com/doc/w3_AcQAYgblAHkCNNLx5o82WQPOJraCi?scode=AJEAIQdfAAoqAa4kn0AcQAYgblAHk" target="_blank" style="display:block; margin-top:14px; padding:8px 10px; background:rgba(74,158,255,0.1); border:1px solid rgba(74,158,255,0.35); border-radius:6px; color:#4a9eff; font-size:0.78em; text-decoration:none; letter-spacing:0.5px; line-height:1.5;">
+        📄 真实材料 →<br><span style="color:#7aaeff;">头部品牌 · 大场作战完整方法论</span>
+      </a>
+    </div>
+
+    <!-- ⑥ 复盘 -->
+    <div style="background:#141414; border:1.5px solid #4ade80; border-radius:12px; padding:32px 26px; box-shadow:0 0 18px rgba(74,222,128,0.18); text-align:center;">
+      <div style="color:#4ade80; font-size:1.3em; margin-bottom:6px; letter-spacing:2px; font-weight:600;">🧠  ⑥ 复盘</div>
+      <div style="color:#888; font-size:0.85em; letter-spacing:1.5px; margin-bottom:24px;">画"线" · 串因果链</div>
+      <div style="color:#f5d77a; font-size:1.9em; font-weight:700; margin-bottom:8px; letter-spacing:2px;">2% → 11%</div>
+      <div style="color:#aaa; font-size:0.9em; line-height:1.7; padding-top:18px; border-top:1px solid #2a2a2a; margin-top:14px;">
+        从"经常省略"到 <span class="gold">每双周稳定做 1 次</span>
+      </div>
+      <a href="https://doc.weixin.qq.com/doc/w3_AcQAYgblAHkCNB3jvkr52TeO1ZOqm?scode=AJEAIQdfAAo72cxMwzAcQAYgblAHk" target="_blank" style="display:block; margin-top:14px; padding:8px 10px; background:rgba(74,158,255,0.1); border:1px solid rgba(74,158,255,0.35); border-radius:6px; color:#4a9eff; font-size:0.78em; text-decoration:none; letter-spacing:0.5px; line-height:1.5;">
+        📄 真实材料 →<br><span style="color:#7aaeff;">膳食行业增长思考 · 研究框架版</span>
+      </a>
+    </div>
+
+    <!-- ⑧ 沉淀 -->
+    <div style="background:#141414; border:1.5px solid #4ade80; border-radius:12px; padding:32px 26px; box-shadow:0 0 18px rgba(74,222,128,0.18); text-align:center;">
+      <div style="color:#4ade80; font-size:1.3em; margin-bottom:6px; letter-spacing:2px; font-weight:600;">📚  ⑧ 沉淀</div>
+      <div style="color:#888; font-size:0.85em; letter-spacing:1.5px; margin-bottom:24px;">写"面" · 抽共性规律</div>
+      <div style="color:#f5d77a; font-size:1.9em; font-weight:700; margin-bottom:8px; letter-spacing:2px;">2% → 8%</div>
+      <div style="color:#aaa; font-size:0.9em; line-height:1.7; padding-top:18px; border-top:1px solid #2a2a2a; margin-top:14px;">
+        每月稳定新增 <span class="gold">1-2 条规则</span> · 翻一次就永远不再犯
+      </div>
+      <a href="https://doc.weixin.qq.com/doc/w3_AcQAYgblAHkCNfytcHJ7sQ1WMC0CV?scode=AJEAIQdfAAoDUXEeoMAcQAYgblAHk" target="_blank" style="display:block; margin-top:14px; padding:8px 10px; background:rgba(74,158,255,0.1); border:1px solid rgba(74,158,255,0.35); border-radius:6px; color:#4a9eff; font-size:0.78em; text-decoration:none; letter-spacing:0.5px; line-height:1.5;">
+        📄 真实材料 →<br><span style="color:#7aaeff;">AI 工作法 · 3 次迭代日志（合集）</span>
+      </a>
+    </div>
+
+  </div>
+
+  <div class="key-quote" style="margin-top:36px; font-size:24px; letter-spacing:2.5px;">
+    ⏫ 打仗打的是 "场"　·　复盘画的是 "线"　·　沉淀写的是 "面"
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- 段4 封面                       -->
+<!-- ============================== -->
+<div class="slide seg-cover" data-seg="4">
+  <div class="seg-num">PART　FOUR</div>
+  <div class="seg-title">用 AI 不被 AI 用<br>4 条心法</div>
+  <div class="seg-sub">先讲 <span style="color:#f5d77a;">4 条心法（内功）</span> · 再讲 <span style="color:#f5d77a;">1 套招式（4 步闭环）</span></div>
+  <div class="seg-meta">　内功练熟 · 招式自来　</div>
+</div>
+
+<!-- ============================== -->
+<!-- 心法 No.1 · 一句话一页           -->
+<!-- ============================== -->
+<div class="slide" data-seg="4">
+  <div class="seg-tag emphasis">段 4 · 心法 No.1</div>
+
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:0 80px;">
+
+    <div style="color:#f5d77a; font-size:1.1em; letter-spacing:6px; margin-bottom:40px; opacity:0.7;">
+      ── 心法 No.1 ──
+    </div>
+
+    <div style="color:#fff; font-size:3em; font-weight:700; line-height:1.5; letter-spacing:4px; margin-bottom:48px;">
+      把 Memory 当 <span style="color:#f5d77a;">"护栏"</span><br>
+      用来 <span style="color:#f5d77a;">约束 AI 不要变成什么样</span>
+    </div>
+
+    <div style="color:#aaa; font-size:1.1em; line-height:2; letter-spacing:2px; padding-top:32px; border-top:1px solid #2a2a2a; max-width:780px;">
+      不是用来"记住你是谁"<br>
+      是用来挡住你 <span class="gold">踩过的雷</span> · 不再踩第二次
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- 心法 No.2 · 一句话一页           -->
+<!-- ============================== -->
+<div class="slide" data-seg="4">
+  <div class="seg-tag emphasis">段 4 · 心法 No.2</div>
+
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:0 80px;">
+
+    <div style="color:#f5d77a; font-size:1.1em; letter-spacing:6px; margin-bottom:40px; opacity:0.7;">
+      ── 心法 No.2 ──
+    </div>
+
+    <div style="color:#fff; font-size:3em; font-weight:700; line-height:1.5; letter-spacing:4px; margin-bottom:48px;">
+      Agent 按 <span style="color:#f5d77a;">"思维视角"</span> 分<br>
+      不按 <span style="color:#888;">"工种功能"</span> 分
+    </div>
+
+    <div style="color:#aaa; font-size:1.1em; line-height:2; letter-spacing:2px; padding-top:32px; border-top:1px solid #2a2a2a; max-width:780px;">
+      工种有限 · 视角稳定<br>
+      视角稳了 · <span class="gold">外壳可以千变万化</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- 心法 No.3 · 一句话一页           -->
+<!-- ============================== -->
+<div class="slide" data-seg="4">
+  <div class="seg-tag emphasis">段 4 · 心法 No.3</div>
+
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:0 80px;">
+
+    <div style="color:#f5d77a; font-size:1.1em; letter-spacing:6px; margin-bottom:40px; opacity:0.7;">
+      ── 心法 No.3 ──
+    </div>
+
+    <div style="color:#fff; font-size:3em; font-weight:700; line-height:1.5; letter-spacing:4px; margin-bottom:48px;">
+      强制留 <span style="color:#f5d77a;">"我的判断"</span> 字段<br>
+      让自己的判断力 <span style="color:#f5d77a;">越用越锐</span>
+    </div>
+
+    <div style="color:#aaa; font-size:1.1em; line-height:2; letter-spacing:2px; padding-top:32px; border-top:1px solid #2a2a2a; max-width:780px;">
+      AI 出 <span class="gold">"选择题"</span> · 人做 <span class="gold">"决策题"</span><br>
+      永远不要让 AI 替你按下回车
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- 心法 No.4 · 一句话一页           -->
+<!-- ============================== -->
+<div class="slide" data-seg="4">
+  <div class="seg-tag emphasis">段 4 · 心法 No.4</div>
+
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:0 80px;">
+
+    <div style="color:#f5d77a; font-size:1.1em; letter-spacing:6px; margin-bottom:40px; opacity:0.7;">
+      ── 心法 No.4 ──
+    </div>
+
+    <div style="color:#fff; font-size:3em; font-weight:700; line-height:1.5; letter-spacing:4px; margin-bottom:48px;">
+      用 Agent 之间 <span style="color:#f5d77a;">"立场冲突"</span><br>
+      做交叉验证 · <span style="color:#f5d77a;">逼出盲点</span>
+    </div>
+
+    <div style="color:#aaa; font-size:1.1em; line-height:2; letter-spacing:2px; padding-top:32px; border-top:1px solid #2a2a2a; max-width:780px;">
+      两个立场不同的 Agent 给相反结论<br>
+      <span class="gold">分歧点 = 你的盲点</span> · 多想 10 分钟
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- 4 步闭环 · 招式合并 1 页          -->
+<!-- ============================== -->
+<div class="slide" data-seg="4">
+  <div class="seg-tag emphasis">段 4 · 招式　·　AI 时代销售 / 任意岗位的 4 步闭环</div>
+
+  <div style="text-align:center; color:#d4d4d4; font-size:1.1em; margin-bottom:8px; letter-spacing:2px;">
+    心法是 <span class="gold">内功</span> · 招式是 <span class="gold">4 步闭环</span>
+  </div>
+  <div style="text-align:center; color:#888; font-size:0.9em; margin-bottom:36px; letter-spacing:1.5px;">
+    每一仗 · 都按这 4 步走一圈 · 跑得越多 · 你的判断力越锐
+  </div>
+
+  <!-- 4 步横向流程 -->
+  <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:14px; padding:0 20px; margin-bottom:36px;">
+
+    <!-- ① 直觉 -->
+    <div style="background:#141414; border:1.5px solid #f5d77a; border-radius:12px; padding:24px 18px; text-align:center; box-shadow:0 0 14px rgba(245,215,122,0.15);">
+      <div style="color:#f5d77a; font-size:1.4em; font-weight:700; margin-bottom:8px;">①</div>
+      <div style="color:#fff; font-size:1.15em; font-weight:600; margin-bottom:10px; letter-spacing:2px;">直觉</div>
+      <div style="color:#aaa; font-size:0.85em; line-height:1.7; letter-spacing:1px;">
+        人主场 · AI 闭嘴<br>
+        <span style="color:#f5d77a;">抓住那颗火星</span>
+      </div>
+    </div>
+
+    <!-- ② 校验 -->
+    <div style="background:#141414; border:1.5px solid #f5d77a; border-radius:12px; padding:24px 18px; text-align:center; box-shadow:0 0 14px rgba(245,215,122,0.15);">
+      <div style="color:#f5d77a; font-size:1.4em; font-weight:700; margin-bottom:8px;">②</div>
+      <div style="color:#fff; font-size:1.15em; font-weight:600; margin-bottom:10px; letter-spacing:2px;">校验</div>
+      <div style="color:#aaa; font-size:0.85em; line-height:1.7; letter-spacing:1px;">
+        AI 主场 · 人提问<br>
+        <span style="color:#f5d77a;">三盆冷水浇下去</span>
+      </div>
+    </div>
+
+    <!-- ③ 放大 -->
+    <div style="background:#141414; border:1.5px solid #f5d77a; border-radius:12px; padding:24px 18px; text-align:center; box-shadow:0 0 14px rgba(245,215,122,0.15);">
+      <div style="color:#f5d77a; font-size:1.4em; font-weight:700; margin-bottom:8px;">③</div>
+      <div style="color:#fff; font-size:1.15em; font-weight:600; margin-bottom:10px; letter-spacing:2px;">放大</div>
+      <div style="color:#aaa; font-size:0.85em; line-height:1.7; letter-spacing:1px;">
+        人 × AI 合奏<br>
+        <span style="color:#f5d77a;">模块化分工 · 你统稿</span>
+      </div>
+    </div>
+
+    <!-- ④ 复盘 -->
+    <div style="background:#141414; border:1.5px solid #f5d77a; border-radius:12px; padding:24px 18px; text-align:center; box-shadow:0 0 14px rgba(245,215,122,0.15);">
+      <div style="color:#f5d77a; font-size:1.4em; font-weight:700; margin-bottom:8px;">④</div>
+      <div style="color:#fff; font-size:1.15em; font-weight:600; margin-bottom:10px; letter-spacing:2px;">复盘</div>
+      <div style="color:#aaa; font-size:0.85em; line-height:1.7; letter-spacing:1px;">
+        AI 主场 · 人定规则<br>
+        <span style="color:#f5d77a;">规则才复利</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 一句话总结金句 -->
+  <div class="key-quote" style="font-size:26px; letter-spacing:3px; margin-bottom:24px;">
+    🔥 听到靠人 · 放大靠 AI · 决策靠人
+  </div>
+</div>
+
+<!-- 4.0 视角切换 过渡（slide 14） · 已删除 · 内容融进段4封面金句 -->
+
+<!-- 4 节循环总览（slide 15） · 横向版 -->
+
+<!-- ============================== -->
+<!-- 段5 封面 · 简化收尾              -->
+<!-- ============================== -->
+<!-- ============================== -->
+<div class="slide seg-cover" data-seg="5">
+  <div class="seg-num">PART　FIVE</div>
+  <div class="seg-title">AI 时代<br>你的<span style="color:#f5d77a;">护城河</span></div>
+  <div class="seg-sub">判断框架　·　因果链接　·　领域直觉</div>
+  <div class="seg-meta">　这些 AI 永远做不到　</div>
+</div>
+
+<!-- 5.1 护城河 · 能/不能对照 -->
+<div class="slide" data-seg="5">
+  <div class="seg-tag emphasis">段 5 · 你的护城河</div>
+  <h2 style="text-align:center;">AI 能做的 <span style="color:#888;">很多</span> · 但有些事它 <span class="gold">永远做不到</span></h2>
+  <h3 style="text-align:center; color:#aaa; margin-bottom:30px;">这些"做不到"的事 · 就是你在 AI 时代的护城河</h3>
+
+  <div class="compare">
+    <div class="col after">
+      <h4>✅ AI 能做（搬运 + 假设 + 质检）</h4>
+      <ul>
+        <li>跨数据源拼接 · 质检 · 飘红</li>
+        <li>格式套版 · 标准化输出</li>
+        <li>多视角假设并联 · 互相校验</li>
+        <li>复盘日志结构化 · 因果链归档</li>
+        <li>跨案例跨周聚类 · 模式抽取</li>
+        <li>反向提问 · 让你的直觉显化</li>
+      </ul>
+    </div>
+    <div class="col before">
+      <h4 style="color: #ff6b6b;">❌ AI 永远做不到（你的护城河）</h4>
+      <ul>
+        <li><span class="gold">判断框架</span> —— 哪些重要 / 哪些可忽略</li>
+        <li><span class="gold">因果链接</span> —— 真原因 vs 假相关</li>
+        <li><span class="gold">领域直觉</span> —— 那一秒"咯噔"</li>
+        <li>红线与边界 —— 政治 / 合规 / 友军</li>
+        <li>关系与信任 —— 直接面对人</li>
+        <li>战略选择 —— 该做 / 不该做</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="gold-quote" style="text-align:center;">
+    <span class="gold">判断框架 · 因果链接 · 领域直觉</span><br>
+    —— 这就是你在 AI 时代真正的护城河
+  </div>
+</div>
+
+<!-- 结束页 · 极简收尾 + 二维码 -->
+<div class="slide finale" data-seg="5" style="position:relative;">
+
+  <!-- 主金句区：上小下大 · 利用 flex 自然居中 + 视觉补偿微上抬 -->
+  <div style="text-align:center; transform: translateY(-40px);">
+    <div style="font-size:38px; color:#f5d77a; font-weight:500; letter-spacing:3px; line-height:1.8; opacity:0.85;">
+      AI 让我们在同样的时间里
+    </div>
+    <div style="font-size:128px; color:#fff; font-weight:800; letter-spacing:18px; line-height:1.4; margin-top:50px; text-shadow:0 0 36px rgba(255,255,255,0.4), 0 0 8px rgba(245,215,122,0.3);">
+      不断扩域
+    </div>
+  </div>
+
+  <!-- 右下角二维码 -->
+  <div style="position:absolute; right:48px; bottom:120px; display:flex; flex-direction:column; align-items:center;">
+    <div style="color:#777; font-size:11px; letter-spacing:1px; margin-bottom:8px;">
+      欢迎 <span style="color:#f5d77a;">AI 爱好者</span> 相互交流
+    </div>
+    <img src="images-v0.6/carmen-wechat-qr.jpg" alt="Carmen 微信二维码" style="width:96px; height:96px; border-radius:8px; background:#fff; padding:4px; box-shadow:0 0 14px rgba(245,215,122,0.18);">
+  </div>
+
+</div>
+
+<!-- ============================== -->
+<!-- 翻页控件                       -->
+<!-- ============================== -->
+<div class="nav">
+  <button onclick="prevSlide()">←</button>
+  <span class="counter" id="counter">1 / 20</span>
+  <button onclick="nextSlide()">→</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.seg-indicator .dot');
+  const counter = document.getElementById('counter');
+  let current = 0;
+  const total = slides.length;
+
+  function showSlide(idx) {
+    if (idx < 0 || idx >= total) return;
+    slides[current].classList.remove('active');
+    slides[idx].classList.add('active');
+    current = idx;
+    counter.textContent = (idx + 1) + ' / ' + total;
+
+    // 段索引高亮
+    const seg = parseInt(slides[idx].dataset.seg) || 0;
+    dots.forEach((d, i) => d.classList.toggle('active', i === seg));
+  }
+
+  function nextSlide() { showSlide(Math.min(current + 1, total - 1)); }
+  function prevSlide() { showSlide(Math.max(current - 1, 0)); }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault(); nextSlide();
+    }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault(); prevSlide();
+    }
+    if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+    if (e.key === 'End') { e.preventDefault(); showSlide(total - 1); }
+  });
+
+  // 初始化
+  showSlide(0);
+</script>
+
+</body>
+</html>
