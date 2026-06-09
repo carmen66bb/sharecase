@@ -336,35 +336,6 @@
     color: #666;
     letter-spacing: 3px;
   }
-
-  /* ===== 签到页（slide 0）专用蓝紫渐变背景 ===== */
-  .slide.checkin-cover {
-    background: linear-gradient(135deg, #4a7fc1 0%, #6b8fd4 35%, #8e9ed8 70%, #b8a8db 100%);
-    overflow: hidden;
-  }
-  .slide.checkin-cover::before {
-    content: "";
-    position: absolute;
-    right: -100px; bottom: -100px;
-    width: 500px; height: 500px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 50%;
-    filter: blur(40px);
-    pointer-events: none;
-  }
-  .slide.checkin-cover::after {
-    content: "";
-    position: absolute;
-    left: 40%; top: 50%;
-    transform: translate(-50%, -50%);
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
-    pointer-events: none;
-  }
-  .slide.checkin-cover > * {
-    position: relative;
-    z-index: 2;
-  }
 </style>
 </head>
 <body>
@@ -381,94 +352,9 @@
 </div>
 
 <!-- ============================== -->
-<!-- 签到页（slide 0 · 公司分享要求 · 14:30 前展示） -->
+<!-- 封面页（slide 0）              -->
 <!-- ============================== -->
-<div class="slide active checkin-cover" data-seg="0" style="padding:60px 90px;">
-  <!-- 顶部小标签 -->
-  <div style="display:inline-block; background:rgba(255,255,255,0.16); color:#fff; padding:8px 20px; border-radius:20px; font-size:15px; letter-spacing:2px; margin-bottom:32px; align-self:flex-start;">
-    CDG AI 提效进行时
-  </div>
-
-  <!-- 左右两栏布局 -->
-  <div style="display:grid; grid-template-columns: 1.35fr 1fr; gap:60px; align-items:center; flex:1;">
-
-    <!-- 左侧：标题 + 5 条 agenda + 嘉宾 -->
-    <div>
-      <h1 style="font-size:46px; line-height:1.35; color:#fff; margin-bottom:40px; font-weight:700;">
-        AI 赋能业务判断力——<br>
-        一线业务岗的<span style="color:#f5d77a;">91天</span>实战
-      </h1>
-
-      <!-- 5 条 agenda -->
-      <div style="display:flex; flex-direction:column; gap:18px; margin-bottom:48px;">
-        <div style="display:flex; align-items:center; gap:16px;">
-          <div style="width:32px; height:32px; background:rgba(245,215,122,0.18); border:1px solid #f5d77a; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#f5d77a; font-size:14px; font-weight:600; flex-shrink:0;">01</div>
-          <div style="color:#e8e8e8; font-size:17px; line-height:1.6;"><span style="color:#fff; font-weight:600;">现状洞察：</span>业务岗 AI 应用的真实现状与突破瓶颈之道</div>
-        </div>
-        <div style="display:flex; align-items:center; gap:16px;">
-          <div style="width:32px; height:32px; background:rgba(245,215,122,0.18); border:1px solid #f5d77a; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#f5d77a; font-size:14px; font-weight:600; flex-shrink:0;">02</div>
-          <div style="color:#e8e8e8; font-size:17px; line-height:1.6;"><span style="color:#fff; font-weight:600;">方法论框架：</span>判断力训练循环：直觉 → 校验 → 放大 → 复盘</div>
-        </div>
-        <div style="display:flex; align-items:center; gap:16px;">
-          <div style="width:32px; height:32px; background:rgba(245,215,122,0.18); border:1px solid #f5d77a; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#f5d77a; font-size:14px; font-weight:600; flex-shrink:0;">03</div>
-          <div style="color:#e8e8e8; font-size:17px; line-height:1.6;"><span style="color:#fff; font-weight:600;">实战案例：</span>5 个真实跑通的业务场景深度复盘</div>
-        </div>
-        <div style="display:flex; align-items:center; gap:16px;">
-          <div style="width:32px; height:32px; background:rgba(245,215,122,0.18); border:1px solid #f5d77a; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#f5d77a; font-size:14px; font-weight:600; flex-shrink:0;">04</div>
-          <div style="color:#e8e8e8; font-size:17px; line-height:1.6;"><span style="color:#fff; font-weight:600;">避坑指南：</span>3 个 AI 协同的常见陷阱 + 2 个 AI 当前学不会的事</div>
-        </div>
-        <div style="display:flex; align-items:center; gap:16px;">
-          <div style="width:32px; height:32px; background:rgba(245,215,122,0.18); border:1px solid #f5d77a; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#f5d77a; font-size:14px; font-weight:600; flex-shrink:0;">05</div>
-          <div style="color:#e8e8e8; font-size:17px; line-height:1.6;"><span style="color:#fff; font-weight:600;">工具赋能：</span>可直接带走的实战工具包：角色定位卡 / 全域作战图 / Pre-meeting 换位独白</div>
-        </div>
-      </div>
-
-      <!-- 嘉宾信息 -->
-      <div style="display:flex; align-items:center; gap:16px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.12);">
-        <!-- 头像（放 images-v0.6/carmen-avatar.png 即可自动显示，否则 fallback 到金色"伍"字圆） -->
-        <div style="width:52px; height:52px; border-radius:50%; overflow:hidden; flex-shrink:0; background:linear-gradient(135deg, #f5d77a, #d4a542); display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.15);">
-          <img src="images-v0.6/carmen-avatar.png"
-               alt="Carmen 头像"
-               style="width:100%; height:100%; object-fit:cover; display:block;"
-               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div style="display:none; width:100%; height:100%; align-items:center; justify-content:center; color:#0a0a0a; font-weight:700; font-size:20px;">伍</div>
-        </div>
-        <div>
-          <div style="color:#fff; font-size:18px; font-weight:600; letter-spacing:1px;">
-            分享嘉宾：　<span style="color:#f5d77a;">carmennwu（伍敏）</span>
-          </div>
-          <div style="color:#aaa; font-size:14px; margin-top:4px;">AMS / 商品消费业务部 / 食品饮料一中心</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 右侧：签到二维码 -->
-    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
-      <div style="background:#fff; padding:24px; border-radius:14px; box-shadow:0 8px 32px rgba(0,0,0,0.4); margin-bottom:20px;">
-        <!-- 二维码图片占位（把官方签到码放到 images-v0.6/checkin-qr.png 即可自动显示） -->
-        <img src="images-v0.6/checkin-qr.png"
-             alt="请扫码签到"
-             style="display:block; width:280px; height:280px; object-fit:contain;"
-             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div style="display:none; width:280px; height:280px; border:2px dashed #999; border-radius:8px; flex-direction:column; align-items:center; justify-content:center; color:#666; font-size:14px; text-align:center; padding:20px;">
-          <div style="font-size:36px; margin-bottom:12px;">📷</div>
-          <div style="line-height:1.6;">
-            请将官方签到二维码<br>
-            另存为<br>
-            <code style="background:#f0f0f0; padding:2px 8px; border-radius:4px; color:#d33; font-size:12px; margin-top:8px; display:inline-block;">images-v0.6/checkin-qr.png</code>
-          </div>
-        </div>
-      </div>
-      <div style="color:#f5d77a; font-size:20px; font-weight:600; letter-spacing:4px;">请扫码签到</div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ============================== -->
-<!-- 原封面页（slide 1）            -->
-<!-- ============================== -->
-<div class="slide" data-seg="0">
+<div class="slide active" data-seg="0">
   <div class="seg-tag">2026 · 06 · 09</div>
   <h1 style="font-size: 64px;">AI 赋能业务判断力</h1>
   <h2 style="font-size: 36px; color: #f5d77a; margin-bottom: 40px;">一线业务岗的 91 天实战</h2>
